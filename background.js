@@ -1,5 +1,6 @@
 
 
+let tabID ;
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
@@ -28,28 +29,32 @@ chrome.runtime.onMessage.addListener(
         || request.url.match(groupRegex)
         || request.url.match(groupShareRegex)){
   
-          request.url = request.url.replace("www", "m");
+          request.url = request.url.replace("www.", "m.");
         }
   
         // 2-2 Create the new tab
   
         chrome.windows.create({'url': request.url}, function(newTab) {
-          
-          // Wait for redirects, then ask to begin downloading
-          setTimeout(()=>{
-    
-            chrome.tabs.sendMessage(newTab.id+1,  {"action": "beginDownload", "id": newTab.id+1});
-          }, 3000)
-  
+
+          tabID = newTab.id+1;
+
         });
 
 
       }else{
 
-        // 3 Close the tab
-    
-        if(request.action === "closeTab"){
-          chrome.tabs.remove(request.id)
+        // 3- Page is loaded, initiate the download process
+  
+        if(request.action === "confirmLoaded"){
+
+          chrome.tabs.sendMessage(tabID,  {"action": "beginDownload", "id": tabID});
+
+        }else{
+
+          // 4- Close the tab
+          if(request.action === "closeTab"){
+            chrome.tabs.remove(request.id)
+          }
         }
       }
     }

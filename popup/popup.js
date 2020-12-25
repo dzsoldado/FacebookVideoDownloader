@@ -12,7 +12,7 @@ document.getElementById("linkForm").addEventListener("submit", (e)=>{
   // 2- Reset the input field
   linkField.value = ""
 
-})
+});
 
 // Display incoming messages
 chrome.runtime.onMessage.addListener(
@@ -21,4 +21,4 @@ chrome.runtime.onMessage.addListener(
       document.getElementById("message").textContent = request.msg
     }
   }
-)
+);
