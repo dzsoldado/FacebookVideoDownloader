@@ -31,8 +31,10 @@ chrome.runtime.onMessage.addListener(
   
           request.url = request.url.replace("www.", "m.");
         }
+
+        
   
-        // 2-2 Create the new tab
+        // 2-2 Create the new tab and save its ID
   
         chrome.windows.create({'url': request.url}, function(newTab) {
 
