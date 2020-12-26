@@ -19,6 +19,7 @@ chrome.runtime.onMessage.addListener(
         let normalWatchRegex = /.*www\.facebook\.com\/watch\/.*/i;
         let groupRegex = /.*www\.facebook\.com\/groups\/.*\/permalink\/.*/i;
         let groupShareRegex = /.*www\.facebook\.com\/.*\/videos\/.*/i;
+        let mobileRegex = /.*m\.facebook\.com\/.*/i;
   
         // To be implemented
         let watchRegex = /.*fb\.watch.*/i
@@ -27,20 +28,22 @@ chrome.runtime.onMessage.addListener(
         if(request.url.match(normalRegex) 
         || request.url.match(normalWatchRegex) 
         || request.url.match(groupRegex)
-        || request.url.match(groupShareRegex)){
+        || request.url.match(groupShareRegex)
+        || request.url.match(mobileRegex)){
   
           request.url = request.url.replace("www.", "m.");
+            
+          // 2-2 Create the new tab and save its ID
+    
+          chrome.windows.create({'url': request.url}, function(newTab) {
+
+            tabID = newTab.id+1;
+
+          });
+        }else{
+          chrome.runtime.sendMessage({"action": "msg", "msg": "Invalid URL"});
+
         }
-
-        
-  
-        // 2-2 Create the new tab and save its ID
-  
-        chrome.windows.create({'url': request.url}, function(newTab) {
-
-          tabID = newTab.id+1;
-
-        });
 
 
       }else{
