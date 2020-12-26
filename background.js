@@ -42,7 +42,6 @@ chrome.runtime.onMessage.addListener(
           });
         }else{
           chrome.runtime.sendMessage({"action": "msg", "msg": "Invalid URL"});
-
         }
 
 

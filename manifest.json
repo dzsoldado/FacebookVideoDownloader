@@ -1,6 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Facebook Video Downloader",
+  "description": "An extension to easily download Facebook videos",
   "version": "0.1",
   "icons": {
     "128": "icons/icon128.png",
