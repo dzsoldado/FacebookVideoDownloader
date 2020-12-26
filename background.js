@@ -20,6 +20,7 @@ chrome.runtime.onMessage.addListener(
         let groupRegex = /.*www\.facebook\.com\/groups\/.*\/permalink\/.*/i;
         let groupShareRegex = /.*www\.facebook\.com\/.*\/videos\/.*/i;
         let mobileRegex = /.*m\.facebook\.com\/.*/i;
+        let webRegex = /.*web\.facebook\.com\/.*/i;
   
         // To be implemented
         let watchRegex = /.*fb\.watch.*/i
@@ -29,9 +30,11 @@ chrome.runtime.onMessage.addListener(
         || request.url.match(normalWatchRegex) 
         || request.url.match(groupRegex)
         || request.url.match(groupShareRegex)
+        || request.url.match(webRegex)
         || request.url.match(mobileRegex)){
   
           request.url = request.url.replace("www.", "m.");
+          request.url = request.url.replace("web.", "m.");
             
           // 2-2 Create the new tab and save its ID
     
