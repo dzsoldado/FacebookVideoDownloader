@@ -12,3 +12,4 @@ This is not a fancy project, just a small extension with a stolen logo for perso
 
 - [ ] Add support for short links (fb.watch/).
 - [ ] Add a download button to each video in the news feed to directly download them.
+- [x] Add support for videos in comments.

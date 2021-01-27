@@ -1,6 +1,6 @@
 
 
-let tabID ;
+let tabID, cmntId ;
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
@@ -24,6 +24,8 @@ chrome.runtime.onMessage.addListener(
   
         // To be implemented
         let watchRegex = /.*fb\.watch.*/i
+
+        let cmntIdRegex = /comment_id=\d+/i;
   
   
         if(request.url.match(normalRegex) 
@@ -32,7 +34,10 @@ chrome.runtime.onMessage.addListener(
         || request.url.match(groupShareRegex)
         || request.url.match(webRegex)
         || request.url.match(mobileRegex)){
-  
+
+          cmntId = request.url.match(cmntIdRegex); // CHeck if the link mentions a comment
+          cmntId = cmntId? cmntId[0].split("=")[1] : null;
+
           request.url = request.url.replace("www.", "m.");
           request.url = request.url.replace("web.", "m.");
             
@@ -54,7 +59,7 @@ chrome.runtime.onMessage.addListener(
   
         if(request.action === "confirmLoaded"){
 
-          chrome.tabs.sendMessage(tabID,  {"action": "beginDownload", "id": tabID});
+          chrome.tabs.sendMessage(tabID,  {"action": "beginDownload", cmntId, "id": tabID});
 
         }else{
 
