@@ -3,7 +3,7 @@
 
 ### A simple Chrome extension to download Facebook videos
 
-This is not a fancy project, just a small extension with a stolen logo for personal use.
+This is not a fancy project, just a small extension ( with a stolen logo ) for personal use.
 
 <img src="demo.gif" alt="Demo">
 
