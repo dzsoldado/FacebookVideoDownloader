@@ -12,13 +12,7 @@ window.onload = (event) => {
 let startvideo = function(){
 
   let clickable = document.querySelector('section>div>div>i.img')
-  
-  if (!clickable){ 
-    send_UI_msg("An error accured!");
-    return window.close();
-  }
-
-  clickable.click();
+  clickable?.click();
   let link = document.getElementsByTagName('video')[0];
 
   if (!link){
