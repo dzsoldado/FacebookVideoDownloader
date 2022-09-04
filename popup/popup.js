@@ -16,8 +16,8 @@ document.getElementById("linkForm").addEventListener("submit", (e)=>{
 
 // Display incoming messages
 chrome.runtime.onMessage.addListener(
-  (request, sender, sendResponse)=>{
-    if(request.action == "msg"){
+  (request)=>{
+    if(request.action === "msg"){
       document.getElementById("message").textContent = request.msg
     }
   }

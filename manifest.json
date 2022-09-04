@@ -1,13 +1,13 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Facebook Video Downloader",
   "description": "An extension to easily download Facebook videos",
-  "version": "0.1",
+  "version": "1.0",
   "icons": {
     "128": "icons/icon128.png",
     "16": "icons/icon16.png"
   },
-  "browser_action": {
+  "action": {
     "default_icon": "icons/icon128.png",
     "default_popup": "popup/popup.html"
   },
@@ -17,10 +17,9 @@
       "js": ["download.js"],
       "run_at": "document_end"
     }
-    
   ],
   "background": {
-    "scripts": ["background.js"]
+    "service_worker": "background.js"
   },
   "permissions": [
     "downloads",

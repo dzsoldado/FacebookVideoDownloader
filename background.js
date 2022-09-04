@@ -1,74 +1,40 @@
 
+function openTab(url){
+  //Validate and normalize link
+  let normalRegex = /.*www\.facebook\.com\/.*\/posts\/.*/i;
+  let normalWatchRegex = /.*www\.facebook\.com\/watch\/.*/i;
+  let groupRegex = /.*www\.facebook\.com\/groups\/.*\/permalink\/.*/i;
+  let groupShareRegex = /.*www\.facebook\.com\/.*\/videos\/.*/i;
+  let mobileRegex = /.*m\.facebook\.com\/.*/i;
+  let webRegex = /.*web\.facebook\.com\/.*/i;
 
-let tabID, cmntId ;
+  // To be implemented
+  let watchRegex = /.*fb\.watch.*/i
+
+
+  if(url.match(normalRegex) 
+  || url.match(normalWatchRegex) 
+  || url.match(groupRegex)
+  || url.match(groupShareRegex)
+  || url.match(webRegex)
+  || url.match(mobileRegex)){
+
+
+    let mobileUrl = url.replace("www.", "m.");
+    mobileUrl = mobileUrl.replace("web.", "m.");
+      
+    // Create the new tab and save its ID
+    chrome.windows.create({url: mobileUrl}, function(newTab) {
+      
+    });
+  }
+}
 
 chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
+  function(request) {
 
-    // 1- Download video from url
-    if(request.action === "download"){
-      chrome.downloads.download({
-        url: request.url
-      })
-    }else{
-      // 2 Open video in new tab
-      if(request.action === "openTab"){
-  
-        // 2-1 Validate and normalize link
-        let normalRegex = /.*www\.facebook\.com\/.*\/posts\/.*/i;
-        let normalWatchRegex = /.*www\.facebook\.com\/watch\/.*/i;
-        let groupRegex = /.*www\.facebook\.com\/groups\/.*\/permalink\/.*/i;
-        let groupShareRegex = /.*www\.facebook\.com\/.*\/videos\/.*/i;
-        let mobileRegex = /.*m\.facebook\.com\/.*/i;
-        let webRegex = /.*web\.facebook\.com\/.*/i;
-  
-        // To be implemented
-        let watchRegex = /.*fb\.watch.*/i
-
-        let cmntIdRegex = /comment_id=\d+/i;
-  
-  
-        if(request.url.match(normalRegex) 
-        || request.url.match(normalWatchRegex) 
-        || request.url.match(groupRegex)
-        || request.url.match(groupShareRegex)
-        || request.url.match(webRegex)
-        || request.url.match(mobileRegex)){
-
-          cmntId = request.url.match(cmntIdRegex); // CHeck if the link mentions a comment
-          cmntId = cmntId? cmntId[0].split("=")[1] : null;
-
-          request.url = request.url.replace("www.", "m.");
-          request.url = request.url.replace("web.", "m.");
-            
-          // 2-2 Create the new tab and save its ID
-    
-          chrome.windows.create({'url': request.url}, function(newTab) {
-
-            tabID = newTab.id+1;
-
-          });
-        }else{
-          chrome.runtime.sendMessage({"action": "msg", "msg": "Invalid URL"});
-        }
-
-
-      }else{
-
-        // 3- Page is loaded, initiate the download process
-  
-        if(request.action === "confirmLoaded"){
-
-          chrome.tabs.sendMessage(tabID,  {"action": "beginDownload", cmntId, "id": tabID});
-
-        }else{
-
-          // 4- Close the tab
-          if(request.action === "closeTab"){
-            chrome.tabs.remove(request.id)
-          }
-        }
-      }
+    if (request.action === 'openTab'){
+      openTab(request.url);
     }
   }
 )
