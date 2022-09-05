@@ -1,9 +1,21 @@
 function send_UI_msg(msg){
   chrome.runtime.sendMessage({"action": "msg", "msg": msg});
-  return ;
 }
 
-function openTab(url){
+function openTab(finalURL){  
+  // Create the new tab and save its ID
+  chrome.windows.create({url: finalURL}, function(newTab) {
+    tabID = newTab.id+1
+  });
+}
+
+function tellTabToDownload(tabID){
+  chrome.tabs.sendMessage(tabID, {"action": "startDownload"});
+}
+
+function openURL(url){
+  let finalURL;
+
   //Validate and normalize link
   let reelRegex = /.*www\.facebook\.com\/reel\/.*/i;
   let normalRegex = /.*www\.facebook\.com\/.*\/posts\/.*/i;
@@ -13,10 +25,7 @@ function openTab(url){
   let groupShareRegex = /.*www\.facebook\.com\/.*\/videos\/.*/i;
   let mobileRegex = /.*m\.facebook\.com\/.*/i;
   let webRegex = /.*web\.facebook\.com\/.*/i;
-
-  // To be implemented
   let watchRegex = /.*fb\.watch.*/i
-
 
   if(url.match(reelRegex) 
   || url.match(normalRegex) 
@@ -27,22 +36,24 @@ function openTab(url){
   || url.match(webRegex)
   || url.match(mobileRegex)){
 
-
-    let mobileUrl = url.replace("www.", "m.");
-    mobileUrl = mobileUrl.replace("web.", "m.");
-      
-    // Create the new tab and save its ID
-    chrome.windows.create({url: mobileUrl}, function(newTab) {
-      tabID = newTab.id+1
-    });
+    finalURL = url.replace("www.", "m.");
+    finalURL = finalURL.replace("web.", "m.");
+    openTab(finalURL)
   }else{
-    send_UI_msg('Wrong or unsupported link')
+    if(url.match(watchRegex)){
+      fetch(url)
+      .then((data)=>{
+        finalURL = data.url.replace("www.", "m.");
+        openTab(finalURL)
+      })
+    }
+    else{
+      send_UI_msg('Wrong or unsupported link')
+    }
   }
 }
 
-function tellTabToDownload(tabID){
-  chrome.tabs.sendMessage(tabID, {"action": "startDownload"});
-}
+// ################################################
 
 let tabID; 
 /* 
@@ -51,14 +62,11 @@ let tabID;
 */
 chrome.runtime.onMessage.addListener(
   function(request) {
-
     if (request.action === 'openTab'){
-      openTab(request.url);
+      openURL(request.url);
     }
-
     if (request.action === 'pageReady'){
       tellTabToDownload(tabID);
     }
-
   }
 )

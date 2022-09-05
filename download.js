@@ -1,4 +1,3 @@
-
 function send_UI_msg(msg){
   chrome.runtime.sendMessage({"action": "msg", "msg": msg});
   return ;

@@ -24,5 +24,10 @@
   "permissions": [
     "downloads",
     "tabs"
+  ],
+  "host_permissions": [
+    "https://fb.watch/*/",
+    "https://www.facebook.com/*/"
   ]
+
 }
