@@ -11,7 +11,7 @@ function startvideo(){
   clickable?.click();
   let link = document.getElementsByTagName('video')[0];
 
-  if (!link){
+  if (!link || link.src.match(/.*blob.*/)){
     send_UI_msg("An error accured!");
     window.close();
   }

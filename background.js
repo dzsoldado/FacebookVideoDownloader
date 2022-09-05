@@ -5,8 +5,10 @@ function send_UI_msg(msg){
 
 function openTab(url){
   //Validate and normalize link
+  let reelRegex = /.*www\.facebook\.com\/reel\/.*/i;
   let normalRegex = /.*www\.facebook\.com\/.*\/posts\/.*/i;
   let normalWatchRegex = /.*www\.facebook\.com\/watch\/.*/i;
+  let newWatchRegex = /.*www\.facebook\.com\/watch\?.*/i;
   let groupRegex = /.*www\.facebook\.com\/groups\/.*\/permalink\/.*/i;
   let groupShareRegex = /.*www\.facebook\.com\/.*\/videos\/.*/i;
   let mobileRegex = /.*m\.facebook\.com\/.*/i;
@@ -16,8 +18,10 @@ function openTab(url){
   let watchRegex = /.*fb\.watch.*/i
 
 
-  if(url.match(normalRegex) 
+  if(url.match(reelRegex) 
+  || url.match(normalRegex) 
   || url.match(normalWatchRegex) 
+  || url.match(newWatchRegex) 
   || url.match(groupRegex)
   || url.match(groupShareRegex)
   || url.match(webRegex)
