@@ -1,3 +1,7 @@
+function send_UI_msg(msg){
+  chrome.runtime.sendMessage({"action": "msg", "msg": msg});
+  return ;
+}
 
 function openTab(url){
   //Validate and normalize link
@@ -25,16 +29,32 @@ function openTab(url){
       
     // Create the new tab and save its ID
     chrome.windows.create({url: mobileUrl}, function(newTab) {
-      
+      tabID = newTab.id+1
     });
+  }else{
+    send_UI_msg('Wrong or unsupported link')
   }
 }
 
+function tellTabToDownload(tabID){
+  chrome.tabs.sendMessage(tabID, {"action": "startDownload"});
+}
+
+let tabID; 
+/* 
+  tabID is used to make sure the scrip on the opened tab
+  only works when the tab is created by this service worker
+*/
 chrome.runtime.onMessage.addListener(
   function(request) {
 
     if (request.action === 'openTab'){
       openTab(request.url);
     }
+
+    if (request.action === 'pageReady'){
+      tellTabToDownload(tabID);
+    }
+
   }
 )

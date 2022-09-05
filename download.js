@@ -4,12 +4,8 @@ function send_UI_msg(msg){
   return ;
 }
 
-window.onload = (event) => {
-  startvideo()
-};
-
 // Check if the video is playable, and play it
-let startvideo = function(){
+function startvideo(){
 
   let clickable = document.querySelector('section>div>div>i.img')
   clickable?.click();
@@ -17,7 +13,7 @@ let startvideo = function(){
 
   if (!link){
     send_UI_msg("An error accured!");
-    return window.close();
+    window.close();
   }
 
   // Download the video from the obtained link 
@@ -25,9 +21,21 @@ let startvideo = function(){
   
   send_UI_msg("Your video is on its way!");
 
-  return window.close();
+  window.close();
 
 };
+
+window.onload = (event) => {
+  chrome.runtime.sendMessage({"action": "pageReady"});
+};
+
+chrome.runtime.onMessage.addListener(function(request){
+  if (request.action === 'startDownload'){
+    startvideo()
+  }
+})
+
+
 
 
 
